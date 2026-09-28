@@ -1,0 +1,33 @@
+{
+  "repo": "google-research/kubric",
+  "base_branch": "main",
+  "base": "61f2422c84bab75006df33c6989e0b483db3ccfe",
+  "source": "kubric/file_io.py",
+  "test": "test/test_png_rescaling.py",
+  "suite_args": [
+    "test/test_fileio.py",
+    "test/test_png_rescaling.py",
+    "test/test_color.py",
+    "test/test_core.py",
+    "test/test_traits.py",
+    "test/test_scene.py",
+    "test/test_cameras.py"
+  ],
+  "original-final": [
+    36,
+    22,
+    0,
+    0
+  ],
+  "restored-final": [
+    36,
+    0,
+    0,
+    0
+  ],
+  "issue": 357,
+  "issue_url": "https://github.com/google-research/kubric/issues/357",
+  "branch": "fix/png-rescaling-endpoints-20260928",
+  "title": "Rescale PNG values by the maximum representable integer",
+  "head": "c017a24dfbeeb1e26550ef2aec3fc4c33b2d2a0d"
+}

@@ -1,0 +1,46 @@
+name: Exact-source regression validation
+on:
+  push:
+    branches:
+      - 'validation/png-rescaling-endpoints-20260928'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10', '3.11']
+    env:
+      TF_CPP_MIN_LOG_LEVEL: '3'
+      TF_NUM_INTEROP_THREADS: '1'
+      TF_NUM_INTRAOP_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      JAX_PLATFORMS: cpu
+      MPLBACKEND: Agg
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: sylvesterkaczmarek/kubric
+          ref: 'c017a24dfbeeb1e26550ef2aec3fc4c33b2d2a0d'
+          path: work
+          fetch-depth: 0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install focused test dependencies
+        run: python -m pip install pytest==9.1.1 pytest-cov ruff pyink tensorflow==2.20.0 numpy==1.26.4 pandas==2.2.3 pyquaternion traitlets etils[epath] imageio pypng Pillow scipy matplotlib trimesh tifffile munch bidict google-cloud-storage hypothesis
+      - name: Verify exact source and original-code controls
+        run: python validation/verify.py work evidence
+      - name: Preserve validation evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: evidence-${{ matrix.python }}
+          path: evidence
+          retention-days: 14
