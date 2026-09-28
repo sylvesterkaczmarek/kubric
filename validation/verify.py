@@ -31,7 +31,7 @@ def test(label, files, expected=0, cwd=work, cover=False):
   command = [python, '-m', 'pytest', *files, '-q', '--tb=short',
              '--junitxml=' + str(xml)]
   if cover:
-    command += ['--cov=' + ('spherical_cnn.weather' if is_sphere else 'kubric.file_io'),
+    command += ['--cov=' + ('spherical_cnn.weather' if is_sphere else 'kubric'),
                 '--cov-branch', '--cov-report=json:' + str(evidence / 'coverage.json')]
   run(label, command, expected=expected, cwd=cwd)
   doc = ET.parse(xml)
